@@ -4,12 +4,14 @@
     <SearchForm />
   </div>
   <Companies />
+  <Footer />
 </template>
 
 <script setup>
 import Navbar from './components/Navbar.vue'
 import SearchForm from './components/SearchForm.vue'
 import Companies from './components/Companies.vue'
+import Footer from './components/Footer.vue';
 </script>
 
 <style>
