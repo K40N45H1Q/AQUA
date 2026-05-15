@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="container">
-      <a href="/" class="logo">{{ $t('textLogo') }}</a>
+      <a href="/" class="logo">AQUA</a>
 
       <nav>
         <a href="/">{{ t('menu.employers') }}</a>
@@ -143,7 +143,7 @@ nav a {
 .logo {
   color: #fff;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 800;
   font-size: 30px;
 }
 .hamburger {
