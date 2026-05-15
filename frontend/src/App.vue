@@ -12,7 +12,6 @@
   box-sizing: border-box;
   font-family: "JetBrainsMono", monospace;
 }
-
 body, html, #root {
   height: 100%;
   background-color: black;
@@ -24,8 +23,10 @@ a {
 
 <template>
   <Navbar />
+  <SearchForm />
 </template>
 
 <script setup>
 import Navbar from './components/Navbar.vue';
+import SearchForm from './components/SearchForm.vue';
 </script>
