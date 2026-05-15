@@ -1,0 +1,27 @@
+{
+  "en": {
+    "languages": {
+      "label": "Languages",
+      "en": "English",
+      "ru": "Russian"
+    },
+    "menu": {
+      "title": "Menu",
+      "employers": "For employers",
+      "entrance": "Sign In"
+    }
+  },
+
+  "ru": {
+    "languages": {
+      "label": "Языки",
+      "en": "Английский",
+      "ru": "Русский"
+    },
+    "menu": {
+      "title": "Меню",
+      "employers": "Для работодателей",
+      "entrance": "Войти"
+    }
+  }
+}
