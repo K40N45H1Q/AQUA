@@ -1,5 +1,7 @@
 {
   "en": {
+    "topEmployers": "Top employers",
+    "offers": "Offers",
     "header": {
       "title": {
         "part1": "Join us — find your ",
@@ -76,6 +78,8 @@
     }
   },
   "ru": {
+    "offers": "предложений",
+    "topEmployers": "Топ работодателей",
     "header": {
       "title": {
         "part1": "С нами Вы найдете ",

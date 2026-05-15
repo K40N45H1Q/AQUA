@@ -107,7 +107,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .wrapper { height: 530px; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #1538d4; }
 .title { text-align: center; margin: 25px 0; }
 .title span:nth-child(1) { color: #ffffff; }
@@ -118,7 +118,7 @@ label { display: flex; flex-direction: column; gap: 6px; width: 100%; font-size:
 input, .dropdown-selected, .dropdown-item { font-family: inherit; font-size: 16px; color: black !important; }
 input { height: 50px; border: 2px solid black; border-radius: 0; padding: 0 15px; width: 100%; box-sizing: border-box; }
 input::placeholder { color: #888888; opacity: 0.7; }
-.dropdown { position: relative; width: 100%; }
+.dropdown { position: relative; width: 100%; cursor: pointer; }
 .dropdown-selected { height: 50px; border: 2px solid black; border-radius: 0; padding: 0 15px; display: flex; align-items: center; cursor: pointer; user-select: none; background: #fff; box-sizing: border-box; }
 .placeholder { color: #888888 !important; opacity: 0.7; }
 .dropdown-list { position: absolute; top: 52px; left: 0; right: 0; background: white; border: 2px solid black; z-index: 9999; max-height: 250px; overflow-y: auto; box-shadow: 0 6px 18px rgba(0,0,0,0.08); }

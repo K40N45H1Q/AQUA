@@ -186,8 +186,8 @@ nav {
       <a href="/" class="logo">LOGO</a>
 
       <nav>
-        <a href="/employers">{{ t('menu.employers') }}</a>
-        <a href="/entrance">{{ t('menu.entrance') }}</a>
+        <a href="/">{{ t('menu.employers') }}</a>
+        <a href="/">{{ t('menu.entrance') }}</a>
         <LanguageSwitcher />
       </nav>
 

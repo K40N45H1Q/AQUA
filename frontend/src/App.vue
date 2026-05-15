@@ -14,7 +14,7 @@
 }
 body, html, #root {
   height: 100%;
-  background-color: black;
+  background-color: #fff;
 }
 a {
   text-decoration: none;
@@ -24,9 +24,11 @@ a {
 <template>
   <Navbar />
   <SearchForm />
+  <Companies />
 </template>
 
 <script setup>
 import Navbar from './components/Navbar.vue';
 import SearchForm from './components/SearchForm.vue';
+import Companies from './components/Companies.vue';
 </script>
