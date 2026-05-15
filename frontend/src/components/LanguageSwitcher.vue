@@ -58,9 +58,7 @@ div > ul > li {
 div > ul > li:hover {
   background: rgba(0,0,0,0.06);
 }
-div > ul > li + li {
-  border-top: 1px solid rgba(0,0,0,0.04);
-}
+
 div > ul > li span {
   line-height: 1;
   color: #000;
