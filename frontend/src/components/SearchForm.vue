@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" ref="root">
+  <div class="search-wrapper" ref="root">
     <h1 class="title">
       <span>{{ t('header.title.part1') }}</span>
       <span>{{ t('header.title.part2') }}</span>
@@ -108,7 +108,7 @@ export default {
 </script>
 
 <style scoped>
-.wrapper {
+.search-wrapper {
   height: 530px;
   display: flex;
   flex-direction: column;
@@ -283,11 +283,14 @@ input::placeholder {
 
 @media (max-width: 768px) {
   .title {
-    font-size: 17px;
+    font-size: 20px;
   }
 
-  .wrapper {
+  .search-wrapper {
+    display: flex;
     height: 430px;
+    align-items: center;
+    justify-content: center;
   }
 
   form {

@@ -14,9 +14,8 @@
   font-family: "JetBrainsMono", monospace;
 }
 
-html, body, #root {
+html, body, #root, .test {
   height: 100%;
-  background: #fff;
 }
 
 a {
@@ -45,11 +44,20 @@ html, body, #root, .wrapper {
 ::-webkit-scrollbar-thumb:hover {
   background: #0f2fb0;
 }
+
+.repair-wrapper {
+  height: max-content;
+  overflow: hidden;
+  background-color: #1538d4;
+}
+
 </style>
 
 <template>
-  <Navbar />
-  <SearchForm />
+  <div class="repair-wrapper">
+    <Navbar />
+    <SearchForm />
+  </div>
   <Companies />
 </template>
 

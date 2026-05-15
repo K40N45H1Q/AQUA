@@ -176,10 +176,8 @@ input {
   align-items: center;
   justify-content: center;
   z-index: 10000;
-  
-  /* Размытие фона */
   backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px); /* для Safari */
+  -webkit-backdrop-filter: blur(8px);
 }
 
 </style>

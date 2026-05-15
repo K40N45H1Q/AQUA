@@ -72,6 +72,7 @@
 .wrapper {
     max-width: 950px;
     margin: 0 auto;
+    background-color: #ffffff !important;
 }
 
 h2 {
