@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="container">
-      <a href="/" class="logo">LOGO</a>
+      <a href="/" class="logo">{{ $t('textLogo') }}</a>
 
       <nav>
         <a href="/">{{ t('menu.employers') }}</a>
