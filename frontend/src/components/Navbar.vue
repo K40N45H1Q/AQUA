@@ -58,7 +58,7 @@
     </aside>
 
     <!-- Модалка входа -->
-    <LoginModal v-model="showLogin" @submit="onLoginSubmit" />
+    <LoginModal v-model="showLogin" />
   </header>
 </template>
 
@@ -100,10 +100,10 @@ function selectLanguage(languageItem) {
   closeMobileMenu()
 }
 
-function onLoginSubmit(payload) {
-  // payload = { email, password }
-  console.log('Login submit', payload)
-}
+// function onLoginSubmit(payload) {
+//   // payload = { email, password }
+//   console.log('Login submit', payload)
+// }
 
 onMounted(() => {
   const savedLanguage = localStorage.getItem('lang')

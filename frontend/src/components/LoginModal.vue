@@ -3,60 +3,168 @@
     <div
       v-if="modelValue"
       class="modal-overlay"
-      @click.self="close"
       role="presentation"
     >
       <div
         class="modal"
         role="dialog"
         aria-modal="true"
-        :aria-label="title"
         ref="dialog"
       >
-        <header class="modal-header">
-          <h2 class="modal-title">{{ title }}</h2>
-          <button class="modal-close" @click="close" aria-label="Close">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M6 6l12 12M18 6L6 18" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Шапка с табами и кнопкой закрытия -->
+        <div class="modal-header">
+          <button
+            :class="{ active: activeTab === 'login' }"
+            class="tab-button"
+            @click="setTab('login')"
+          >
+            {{ $t('login') }}
+          </button>
+          <button
+            :class="{ active: activeTab === 'register' }"
+            class="tab-button"
+            @click="setTab('register')"
+          >
+            {{ $t('register') }}
+          </button>
+
+          <button class="modal-close-button" @click="close" aria-label="Close">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
-        </header>
+        </div>
 
-        <form class="modal-body" @submit.prevent="submit">
-          <label class="field">
-            <span class="field-label">{{ $t('email') }}</span>
-            <input ref="firstInput" v-model="email" type="email" required autocomplete="email" />
-          </label>
+        <div class="modal-body">
+          <!-- Вкладка Вход -->
+          <div v-if="activeTab === 'login'" class="login-section">
+            <form @submit.prevent="submit">
+              <div class="form-field">
+                <input
+                  ref="firstInput"
+                  v-model="email"
+                  type="email"
+                  :placeholder="$t('email')"
+                  required
+                  autocomplete="email"
+                />
+              </div>
 
-          <label class="field">
-            <span class="field-label">{{ $t('password') }}</span>
-            <input v-model="password" type="password" required autocomplete="current-password" />
-          </label>
+              <div class="form-field">
+                <input
+                  v-model="password"
+                  type="password"
+                  :placeholder="$t('password')"
+                  required
+                  autocomplete="current-password"
+                />
+              </div>
 
-          <div class="modal-actions">
-            <button type="button" class="btn" @click="close">{{ $t('up') }}</button>
-            <button type="submit" class="btn primary">{{ $t('sign') }}</button>
+              <button type="submit" class="primary-button">
+                {{ $t('login') }}
+              </button>
+
+              <a href="https://t.me/gh057wr" class="forgot-password-link">
+                {{ $t('forgot_password') }}
+              </a>
+            </form>
           </div>
-        </form>
+
+          <!-- Вкладка Регистрация -->
+          <div v-else class="register-section">
+            <!-- Выбор типа аккаунта -->
+            <div v-if="!selectedRole" class="role-selection">
+              <h3 class="register-heading">{{ $t('register_as') }}</h3>
+              
+              <button
+                class="role-button"
+                @click="handleRoleSelect('jobseeker')"
+              >
+                {{ $t('for_job_seeker') }}
+              </button>
+              
+              <button
+                class="role-button"
+                @click="handleRoleSelect('employer')"
+              >
+                {{ $t('for_employer') }}
+              </button>
+            </div>
+
+            <!-- Форма регистрации после выбора роли -->
+            <div v-else>
+              <h3 class="register-heading">
+                {{ $t('registration') }} {{ selectedRole === 'jobseeker' ? $t('jobseeker') : $t('employer') }}
+              </h3>
+              <form @submit.prevent="registerSubmit">
+                <div class="form-field">
+                  <input
+                    ref="regFirstInput"
+                    v-model="regEmail"
+                    type="email"
+                    :placeholder="$t('email')"
+                    required
+                    autocomplete="email"
+                  />
+                </div>
+
+                <div class="form-field">
+                  <input
+                    v-model="regPassword"
+                    type="password"
+                    :placeholder="$t('password')"
+                    required
+                    autocomplete="new-password"
+                  />
+                </div>
+
+                <div class="form-field">
+                  <input
+                    v-model="regConfirmPassword"
+                    type="password"
+                    :placeholder="$t('confirm_password')"
+                    required
+                    autocomplete="new-password"
+                  />
+                </div>
+
+                <button type="submit" class="primary-button">
+                  {{ $t('register') }}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </teleport>
 </template>
 
 <script setup>
-import { ref, watch, onBeforeUnmount } from 'vue'
+import { ref, watch, onBeforeUnmount, nextTick } from 'vue'
 
 const props = defineProps({
-  modelValue: { type: Boolean, default: false },
-  // Ожидается ключ перевода, например 'login'
-  title: { type: String, default: '🔒' }
+  modelValue: { type: Boolean, default: false }
 })
-const emit = defineEmits(['update:modelValue', 'submit'])
+
+const emit = defineEmits([
+  'update:modelValue',
+  'submit',
+  'forgot-password',
+  'register'
+])
+
+const activeTab = ref('login')
+const selectedRole = ref(null)
 
 const email = ref('')
 const password = ref('')
-const dialog = ref(null)
+const regEmail = ref('')
+const regPassword = ref('')
+const regConfirmPassword = ref('')
+
 const firstInput = ref(null)
+const regFirstInput = ref(null)
 
 function close() {
   emit('update:modelValue', false)
@@ -64,30 +172,51 @@ function close() {
 
 function submit() {
   emit('submit', { email: email.value, password: password.value })
-  // очищаем поля после отправки
   email.value = ''
   password.value = ''
   close()
 }
 
-function onKeydown(e) {
-  if (e.key === 'Escape') close()
+function registerSubmit() {
+  emit('register', {
+    role: selectedRole.value,
+    email: regEmail.value,
+    password: regPassword.value,
+    confirmPassword: regConfirmPassword.value
+  })
+  regEmail.value = ''
+  regPassword.value = ''
+  regConfirmPassword.value = ''
+  selectedRole.value = null
+  close()
+}
+
+function setTab(tab) {
+  activeTab.value = tab
+  if (tab === 'register') {
+    selectedRole.value = null
+  } else {
+    nextTick(() => firstInput.value?.focus())
+  }
+}
+
+function handleRoleSelect(role) {
+  selectedRole.value = role
+  nextTick(() => regFirstInput.value?.focus())
 }
 
 watch(() => props.modelValue, (val) => {
   if (val) {
-    // фокус на первый инпут
-    setTimeout(() => firstInput.value?.focus(), 0)
-    document.addEventListener('keydown', onKeydown)
+    activeTab.value = 'login'
+    selectedRole.value = null
+    setTimeout(() => firstInput.value?.focus(), 10)
     document.body.style.overflow = 'hidden'
   } else {
-    document.removeEventListener('keydown', onKeydown)
     document.body.style.overflow = ''
   }
 })
 
 onBeforeUnmount(() => {
-  document.removeEventListener('keydown', onKeydown)
   document.body.style.overflow = ''
 })
 </script>
@@ -96,88 +225,166 @@ onBeforeUnmount(() => {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.36);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
-}
-.modal {
-  width: 420px;
-  max-width: calc(100% - 32px);
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-  overflow: hidden;
-}
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 16px;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-}
-.modal-title { font-size: 18px; font-weight: 600; color: #111; margin: 0; }
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  padding: 6px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.modal-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
-.field { display: flex; flex-direction: column; gap: 6px; }
-.field-label { font-size: 13px; color: #555; }
-input[type="email"], input[type="password"] {
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(0,0,0,0.08);
-  font-size: 14px;
-  outline: none;
-}
-input:focus {
-  box-shadow: 0 0 0 3px rgba(21,56,212,0.12);
-  border-color: rgba(21,56,212,0.6);
-}
-.modal-actions { display:flex; gap: 8px; justify-content: flex-end; margin-top: 6px; }
-.btn { padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.08); background: #fff; cursor: pointer; }
-.btn.primary { background: rgba(21,56,212,0.95); color: #fff; border: none; }
-
-button {
-    width: 100%;
-    background-color: #00c853 !important;
-    color: #000 !important;
-    border: 1px solid black !important;
-}
-
-button:hover {
-    color: #fff;
-    background-color: #4f46e5;
-}
-
-.modal-close {
-    width: max-content;
-    border-radius: 50%;
-}
-
-input {
-    color: black !important;
-    outline: none !important;
-    border: 1px solid black !important;
-}
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.36);
+  background: rgba(0, 0, 0, 0.36);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10000;
   backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
 }
 
+.modal {
+  width: 420px;
+  max-width: calc(100% - 32px);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  border: 2px solid #2563eb;
+}
+
+.modal-header {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 18px 0;
+  font-size: 17px;
+  font-weight: 500;
+  color: #2563eb;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.tab-button.active {
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #2563eb;
+}
+
+.modal-close-button {
+  flex-shrink: 0;
+  width: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.modal-close-button:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.modal-body {
+  padding: 28px 28px 32px;
+}
+
+.form-field {
+  margin-bottom: 16px;
+}
+
+.form-field input {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s;
+  color: #111;
+}
+
+.form-field input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+}
+
+.primary-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #00c853;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 8px 0 16px;
+  transition: background-color 0.2s;
+}
+
+.primary-button:hover {
+  background-color: #00b84a;
+}
+
+.forgot-password-link {
+  display: block;
+  text-align: center;
+  color: #2563eb;
+  font-size: 14.5px;
+  text-decoration: none;
+  margin-bottom: 24px;
+}
+
+.forgot-password-link:hover {
+  text-decoration: underline;
+}
+
+.register-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.register-heading {
+  text-align: center;
+  font-size: 17px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 12px;
+}
+
+.role-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.role-button {
+  width: 100%;
+  padding: 18px 20px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  color: #2563eb;
+  font-size: 15.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.role-button:hover {
+  border-color: #2563eb;
+  background: #f8fafc;
+}
 </style>
