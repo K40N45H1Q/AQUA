@@ -1,9 +1,10 @@
 <style>
 @font-face {
+  font-family: "JetBrainsMono";
   font-style: normal;
   font-weight: 100 900;
-  font-family: "JetBrainsMono";
   src: url("/JetBrainsMono.ttf") format("truetype");
+  font-display: swap;
 }
 * {
   margin: 0;

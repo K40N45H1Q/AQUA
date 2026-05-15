@@ -20,7 +20,7 @@
     "menu": {
       "title": "Menu",
       "employers": "For employers",
-      "entrance": "Sign In"
+      "entrance": "Login/Register"
     },
     "search": {
       "search.noPlaces": "No cities",
