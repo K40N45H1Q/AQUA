@@ -1,5 +1,11 @@
 {
   "en": {
+    "header": {
+      "title": {
+        "part1": "Join us — find your ",
+        "part2": "dream job"
+      }
+    },
     "languages": {
       "label": "Languages",
       "en": "English",
@@ -9,10 +15,73 @@
       "title": "Menu",
       "employers": "For employers",
       "entrance": "Sign In"
+    },
+    "search": {
+      "search.noPlaces": "No cities",
+      "noCategories": "No categories",
+      "placeLabel": "Place of work",
+      "categoryLabel": "Job category",
+      "keywordLabel": "Keyword",
+      "button": "Show results",
+      "places": [
+        "Riga",
+        "Daugavpils",
+        "Liepaja",
+        "Jelgava",
+        "Jurmala",
+        "Ventspils",
+        "Rezekne",
+        "Valmiera",
+        "Ogre",
+        "Jekabpils",
+        "Tukums",
+        "Cesis",
+        "Kuldiga",
+        "Saldus",
+        "Limbazi",
+        "Madona",
+        "Bauska",
+        "Sigulda",
+        "Salaspils",
+        "Olaine",
+        "Marupe",
+        "Kekava",
+        "Aizkraukle",
+        "Dobele",
+        "Aluksne",
+        "Gulbene",
+        "Ludza",
+        "Balvi",
+        "Kraslava",
+        "Smiltene",
+        "Skrunda",
+        "Aizpute",
+        "Viesite",
+        "Nereta",
+        "Iecava",
+        "Rucava",
+        "Rujiena",
+        "Sabile",
+        "Valka"
+      ],
+      "categories": [
+        "IT",
+        "Construction",
+        "Logistics",
+        "Sales",
+        "Healthcare",
+        "Education",
+        "Hospitality"
+      ]
     }
   },
-
   "ru": {
+    "header": {
+      "title": {
+        "part1": "С нами Вы найдете ",
+        "part2": "работу своей мечты."
+      }
+    },
     "languages": {
       "label": "Языки",
       "en": "Английский",
@@ -22,6 +91,62 @@
       "title": "Меню",
       "employers": "Для работодателей",
       "entrance": "Войти"
+    },
+    "search": {
+      "placeLabel": "Место работы",
+      "categoryLabel": "Категория работы",
+      "keywordLabel": "Ключевое слово",
+      "button": "Показать результаты",
+      "places": [
+        "Рига",
+        "Даугавпилс",
+        "Лиепая",
+        "Елгава",
+        "Юрмала",
+        "Вентспилс",
+        "Резекне",
+        "Валмиера",
+        "Огре",
+        "Екабпилс",
+        "Тукумс",
+        "Цесис",
+        "Кулдига",
+        "Салдус",
+        "Лимбажи",
+        "Мадона",
+        "Бауска",
+        "Сигулда",
+        "Саласпилс",
+        "Олайне",
+        "Марупе",
+        "Кекава",
+        "Айзкраукле",
+        "Добеле",
+        "Алуксне",
+        "Гулбене",
+        "Лудза",
+        "Балви",
+        "Краслава",
+        "Смилтене",
+        "Скрунда",
+        "Айзпуте",
+        "Виесите",
+        "Нерета",
+        "Иецава",
+        "Руцава",
+        "Руйена",
+        "Сабиле",
+        "Валка"
+      ],
+      "categories": [
+        "IT",
+        "Строительство",
+        "Логистика",
+        "Продажи",
+        "Здравоохранение",
+        "Образование",
+        "Гостеприимство"
+      ]
     }
   }
 }
