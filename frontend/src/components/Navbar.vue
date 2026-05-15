@@ -1,8 +1,123 @@
+<template>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">LOGO</a>
+
+      <nav>
+        <a href="/">{{ t('menu.employers') }}</a>
+        <button class="nav-link" @click.prevent="openLogin">{{ t('menu.entrance') }}</button>
+        <LanguageSwitcher />
+      </nav>
+
+      <button
+        class="hamburger"
+        :class="{ open: mobileMenuOpen }"
+        aria-controls="mobile-drawer"
+        :aria-expanded="mobileMenuOpen"
+        @click="toggleMobileMenu"
+        type="button"
+      >
+        <span class="line" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <div class="mobile-overlay" :class="{ open: mobileMenuOpen }" @click="closeMobileMenu"></div>
+
+    <aside id="mobile-drawer" class="mobile-drawer" :class="{ open: mobileMenuOpen }" role="dialog" aria-modal="true">
+      <div class="drawer-header">
+        <div class="drawer-title">{{ t('menu.title') }}</div>
+        <button class="drawer-close" @click="closeMobileMenu" aria-label="Close menu" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="drawer-nav">
+        <!-- мобильная кнопка открытия модалки: стиль НЕ менял (как у остальных ссылок в drawer) -->
+        <button class="drawer-link" @click.prevent="openLogin">{{ t('menu.entrance') }}</button>
+        <a href="/employers" @click="closeMobileMenu">{{ t('menu.employers') }}</a>
+      </nav>
+
+      <div class="lang-section" role="region" aria-label="Language selection">
+        <div class="lang-label">{{ t('languages.label') }}</div>
+        <div class="lang-list" role="list">
+          <button
+            v-for="languageItem in languagesList"
+            :key="languageItem.code"
+            :class="['lang-item', { active: languageItem.code === locale.value }]"
+            @click="selectLanguage(languageItem)"
+            type="button"
+            role="listitem"
+          >
+            <img :src="languageItem.flag" :alt="languageItem.code" />
+            <span>{{ t('languages.' + languageItem.code) }}</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Модалка входа -->
+    <LoginModal v-model="showLogin" @submit="onLoginSubmit" />
+  </header>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import LanguageSwitcher from './LanguageSwitcher.vue'
+import LoginModal from './LoginModal.vue' // путь: файл должен быть рядом с этим компонентом
+
+const i18n = useI18n()
+const locale = i18n.locale
+const t = i18n.t
+
+const mobileMenuOpen = ref(false)
+const showLogin = ref(false)
+
+const languagesList = [
+  { code: 'ru', flag: '/flags/ru.svg' },
+  { code: 'en', flag: '/flags/gb.svg' }
+]
+
+function toggleMobileMenu() {
+  mobileMenuOpen.value = !mobileMenuOpen.value
+}
+
+function closeMobileMenu() {
+  mobileMenuOpen.value = false
+}
+
+function openLogin() {
+  // закрываем мобильное меню если открыт
+  mobileMenuOpen.value = false
+  showLogin.value = true
+}
+
+function selectLanguage(languageItem) {
+  locale.value = languageItem.code
+  localStorage.setItem('lang', languageItem.code)
+  closeMobileMenu()
+}
+
+function onLoginSubmit(payload) {
+  // payload = { email, password }
+  console.log('Login submit', payload)
+}
+
+onMounted(() => {
+  const savedLanguage = localStorage.getItem('lang')
+  if (savedLanguage) {
+    locale.value = savedLanguage
+  }
+})
+</script>
+
 <style scoped>
 header {
   width: 100%;
   height: 80px;
-  background: #1538d4;
+  background: rgba(21, 56, 212, 0.9);
   display: flex;
   align-items: center;
 }
@@ -20,6 +135,10 @@ nav {
   align-items: center;
   font-size: 16px;
   color: #fff;
+}
+nav a {
+  color: #fff;
+  text-decoration: none;
 }
 .logo {
   color: #fff;
@@ -125,6 +244,40 @@ nav {
   border-radius: 8px;
 }
 
+/* nav-link — десктоп: белый текст (как и везде) */
+.nav-link {
+  background: none;
+  border: none;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+}
+
+/* drawer-link — мобильное меню: вернуть поведение как у обычных ссылок drawer (тёмный текст на белом фоне) */
+.drawer-link {
+  background: transparent;
+  border: none;
+  color: #111;
+  font: inherit;
+  cursor: pointer;
+  padding: 12px 10px;
+  border-radius: 8px;
+  text-align: left;
+  display: block;
+}
+
+/* hover/focus состояния для drawer items */
+.drawer-link:hover,
+.drawer-link:focus,
+.drawer-nav a:hover,
+.drawer-nav a:focus {
+  background-color: rgba(0,0,0,0.06);
+  outline: none;
+}
+
+/* Стили для языковой секции */
 .lang-section {
   margin-top: 16px;
 }
@@ -164,9 +317,14 @@ nav {
 }
 
 .lang-item:hover, .drawer-nav a:hover {
-    width: 100%;
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.1);
+  width: 100%;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.drawer-link {
+  width: 100% !important;
+  text-align: center !important;
 }
 
 @media (max-width: 950px) {
@@ -178,102 +336,8 @@ nav {
   .mobile-drawer { display: none; }
   .mobile-overlay { display: none; }
 }
+
+nav {
+  z-index: 10000000;
+}
 </style>
-
-<template>
-  <header>
-    <div class="container">
-      <a href="/" class="logo">LOGO</a>
-
-      <nav>
-        <a href="/">{{ t('menu.employers') }}</a>
-        <a href="/">{{ t('menu.entrance') }}</a>
-        <LanguageSwitcher />
-      </nav>
-
-      <button
-        class="hamburger"
-        :class="{ open: mobileMenuOpen }"
-        aria-controls="mobile-drawer"
-        :aria-expanded="mobileMenuOpen"
-        @click="toggleMobileMenu"
-        type="button"
-      >
-        <span class="line" aria-hidden="true"></span>
-      </button>
-    </div>
-
-    <div class="mobile-overlay" :class="{ open: mobileMenuOpen }" @click="closeMobileMenu"></div>
-
-    <aside id="mobile-drawer" class="mobile-drawer" :class="{ open: mobileMenuOpen }" role="dialog" aria-modal="true">
-      <div class="drawer-header">
-        <div class="drawer-title">{{ t('menu.title') }}</div>
-        <button class="drawer-close" @click="closeMobileMenu" aria-label="Close menu" type="button">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 6l12 12M18 6L6 18" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
-
-      <nav class="drawer-nav">
-        <a href="/entrance" @click="closeMobileMenu">{{ t('menu.entrance') }}</a>
-        <a href="/employers" @click="closeMobileMenu">{{ t('menu.employers') }}</a>
-      </nav>
-
-      <div class="lang-section" role="region" aria-label="Language selection">
-        <div class="lang-label">{{ t('languages.label') }}</div>
-        <div class="lang-list" role="list">
-          <button
-            v-for="languageItem in languagesList"
-            :key="languageItem.code"
-            :class="['lang-item', { active: languageItem.code === locale.value }]"
-            @click="selectLanguage(languageItem)"
-            type="button"
-            role="listitem"
-          >
-            <img :src="languageItem.flag" :alt="languageItem.code" />
-            <span>{{ t('languages.' + languageItem.code) }}</span>
-          </button>
-        </div>
-      </div>
-    </aside>
-  </header>
-</template>
-
-<script setup>
-import { ref, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-import LanguageSwitcher from './LanguageSwitcher.vue'
-
-const i18n = useI18n()
-const locale = i18n.locale
-const t = i18n.t
-
-const mobileMenuOpen = ref(false)
-
-const languagesList = [
-  { code: 'ru', flag: '/flags/ru.svg' },
-  { code: 'en', flag: '/flags/gb.svg' }
-]
-
-function toggleMobileMenu() {
-  mobileMenuOpen.value = !mobileMenuOpen.value
-}
-
-function closeMobileMenu() {
-  mobileMenuOpen.value = false
-}
-
-function selectLanguage(languageItem) {
-  locale.value = languageItem.code
-  localStorage.setItem('lang', languageItem.code)
-  closeMobileMenu()
-}
-
-onMounted(() => {
-  const savedLanguage = localStorage.getItem('lang')
-  if (savedLanguage) {
-    locale.value = savedLanguage
-  }
-})
-</script>

@@ -1,7 +1,11 @@
 {
   "en": {
+    "sign": "Sign In",
+    "up": "Sign Up",
+    "email": "Email",
+    "password": "Password",
     "topEmployers": "Top employers",
-    "offers": "Offers",
+    "offers": "offers",
     "header": {
       "title": {
         "part1": "Join us — find your ",
@@ -78,11 +82,15 @@
     }
   },
   "ru": {
+    "sign": "Войти",
+    "up": "Зарегистрироваться",
+    "email": "Электроная почта",
+    "password": "Пароль",
     "offers": "предложений",
     "topEmployers": "Топ работодателей",
     "header": {
       "title": {
-        "part1": "С нами Вы найдете ",
+        "part1": "Найдите ",
         "part2": "работу своей мечты."
       }
     },
@@ -94,7 +102,7 @@
     "menu": {
       "title": "Меню",
       "employers": "Для работодателей",
-      "entrance": "Войти"
+      "entrance": "Вход/Регистрация"
     },
     "search": {
       "placeLabel": "Место работы",
