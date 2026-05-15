@@ -34,8 +34,8 @@
           </label>
 
           <div class="modal-actions">
-            <button type="submit" class="btn primary">{{ $t('sign') }}</button>
             <button type="button" class="btn" @click="close">{{ $t('up') }}</button>
+            <button type="submit" class="btn primary">{{ $t('sign') }}</button>
           </div>
         </form>
       </div>
